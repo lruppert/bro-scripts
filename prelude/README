@@ -1,0 +1,16 @@
+These go in /etc/prelude-lml/rules
+
+You'll then need to modify the following files with the following bits:
+
+/etc/prelude-lml/prelude-lml.conf:
+
+[format=bro]
+time-format = "%S"
+prefix-regex = "^(?P<timestamp>.{10})"
+file = /data/bro-cluster/logs/current/notice.log
+
+
+/etc/prelude-lml/ruleset/pcre.rules:
+
+regex=ACTION_LOG;		include = bro-2.0.rules;
+

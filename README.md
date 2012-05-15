@@ -30,3 +30,9 @@ rule for potential Zeus C2 domains.
 tune-md5.bro - Tunes out md5 notices on systems in certain commonly used and
 trusted networks.
 
+Rsyslog
+--------
+
+bro-ids.conf - Adds rules to rsyslog so that bro data is sent to an ELSA 
+instance.  Shamelessly stolen from Martin Holste.  Put it in /etc/rsyslog.d/
+
