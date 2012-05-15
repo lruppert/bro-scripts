@@ -1,0 +1,152 @@
+# Weird:: alerts are low priority
+regex=\d+\.\d+\t\w+\t([\d\.]+)\t(\d+)\t([\d\.]+)\t(\d+)\t\S+\t(Weird\:\:.+)\t(.+)\t(.+)\t([\d\.]+)\t([\d\.]+)\t(\d+)\t.+\t\S+; \
+ classification.text=Bro-2.0: Weird activity $6; \
+ id=11005; \
+ revision=2; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=info; \
+ assessment.impact.description=$6; \
+ source(0).node.address(0).category=ipv4-addr; \
+ source(0).node.address(0).address=$1; \
+ source(0).service.port=$2; \
+ target(0).node.address(0).category=ipv4-addr; \
+ target(0).node.address(0).address=$3; \
+ target(0).service.port=$4; \
+ silent; \
+ last
+# SQL Injection (limited syntax)
+regex=\d+\.\d+\t\-\t\-\t-\t-\t-\t\-\tHTTP\:\:SQL_Injection_Victim\tThreshold crossed by metric_index.*\t\-\t([\d\.]+); \
+ classification.text=Potential SQL Injection against $1; \
+ id=11011; \
+ revision=2; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=IDS; \
+ assessment.impact.severity=medium; \
+ assessment.impact.description=Heuristically detected SQL Injection attack on $1; \
+ target(0).node.address(0).category=ipv4-addr; \
+ target(0).node.address(0).address=$1; \
+ last
+
+regex=\d+\.\d+\t\-\t\-\t-\t-\t-\t\-\tHTTP\:\:SQL_Injection_Attacker\tThreshold crossed by metric_index.*\t\-\t([\d\.]+); \
+ classification.text=Potential SQL Injection Attack from $1; \
+ id=11012; \
+ revision=2; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=IDS; \
+ assessment.impact.severity=medium; \
+ assessment.impact.description=Heuristically detected SQL Injection attack on $1; \
+ source(0).node.address(0).category=ipv4-addr; \
+ source(0).node.address(0).address=$1; \
+ last
+# SSH password guessing
+regex=\d+\.\d+\t\-\t\-\t-\t-\t-\t\-\tSSH\:\:Password_Guessing\tThreshold crossed by metric_index.*\t\-\t([\d\.]+); \
+ classification.text=Potential SSH Brute-Force from $1; \
+ id=11013; \
+ revision=1; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=medium; \
+ assessment.impact.description=Heuristically detected SSH attack from $1; \
+ source(0).node.address(0).category=ipv4-addr; \
+ source(0).node.address(0).address=$1; \
+ last
+
+# Catchall for log format for ipv4
+regex=\d+\.\d+\t\w+\t([\d\.]+)\t(\d+)\t([\d\.]+)\t(\d+)\t\S+\t(.+)\t(.+)\t(.+)\t([\d\.]+)\t([\d\.]+)\t(\d+)\t.+\t\S+; \
+ classification.text=Bro-2.0: $5 $6; \
+ id=11001; \ 
+ revision=7; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=medium; \
+ assessment.impact.completion=succeeded; \
+ assessment.impact.description=$6; \
+ source(0).node.address(0).category=ipv4-addr; \
+ source(0).node.address(0).address=$1; \
+ source(0).service.port=$2; \
+ target(0).node.address(0).category=ipv4-addr; \
+ target(0).node.address(0).address=$3; \
+ target(0).service.port=$4; \
+ last
+
+# Vulnerable Software (limited syntax)
+regex=\d+\.\d+\t\-\t\-\t-\t-\t-\t\-\tSoftware\:\:Vulnerable_Version\tA vulnerable version of software was detected: (.*)\t\-\t([\d\.]+); \
+ classification.text=Bro-2.0: Vulnerable software $1; \
+ id=11010; \
+ revision=7; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=medium; \
+ assessment.impact.completion=succeeded; \
+ assessment.impact.description=System running $1; \
+ source(0).node.address(0).category=ipv4-addr; \
+ source(0).node.address(0).address=$2; \
+ target(0).node.address(0).category=ipv4-addr; \
+ target(0).node.address(0).address=$2; \
+ last
+
+
+# Catchall for log format for ipv6
+regex=\d+\.\d+\t\S+\t([\w\:]+)\t(\d+)\t([\w\:]+)\t(\d+)\t\S+\t(.+)\t(.+)\t(.+)\t([\w\:]+)\t([\w\:]+)\t(\d+)\t.+\t\S+; \
+ classification.text=Bro-2.0: $5 $6; \
+ id=11002; \
+ revision=2; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=medium; \
+ assessment.impact.completion=succeeded; \
+ assessment.impact.description=$6; \
+ source(0).node.address(0).category=ipv6-addr; \
+ source(0).node.address(0).address=$1; \
+ source(0).service.port=$2; \
+ target(0).node.address(0).category=ipv6-addr; \
+ target(0).node.address(0).address=$3; \
+ target(0).service.port=$4; \
+ last
+
+# Packet loss logging:
+regex=\d+\.\d+\t-\t-\t-\t-\t-\t-\tCaptureLoss\:\:Too_Much_Loss\t(.+)\t-\t-\t-\t-\t-\t(\S+)\tNotice\:\:ACTION_LOG; \
+ classification.text=Bro-2.0: Packet loss upstream from $2; \
+ id=11109; \
+ revision=3; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=info; \
+ assessment.impact.description=$1; \
+ silent; \
+ last
+
+# 1332861044.124847       -       -       -       -       -       -       PacketFilter::Dropped_Packets   1 packets dropped after filtering, 95362 received, 95361 on link        -       -       -       -       -       high-4  Notice::ACTION_LOG      7       3600.000000     F
+regex=\d+\.\d+\t-\t-\t-\t-\t-\t-\tPacketFilter\:\:Dropped_Packets\t(.+)\t\-\t-\t-\t-\t-\t(\S+)\tNotice\:\:ACTION_LOG; \
+ classification.text=Bro-2.0: Packet loss on $2; \
+ id=11110; \
+ revision=3; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=info; \
+ assessment.impact.description=$1; \
+ silent; \
+ last
+
+# Catchall for non-parsed logs:
+regex=^\d+\.\d+\t(.+);\
+ classification.text=Bro-2.0: Unparsed log entry; \
+ id=11111; \
+ revision=3; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=info; \
+ assessment.impact.description=$1; \
+ last
+

@@ -1,0 +1,58 @@
+#!/bin/sh -e
+#
+### BEGIN INIT INFO
+# Provides:          bro-ids
+# Required-Start:    $time $network $local_fs $remote_fs
+# Required-Stop:     $remote_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Next Generation IDS/IPS
+# Description:       Intrusion detection system that will
+#                    capture traffic from the network cards and will
+#                    match against a set of known attacks.
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+# We'll add up all the options above and use them
+NAME=bro-ids
+DAEMON=/usr/local/bro/current/bin/broctl
+
+
+check_root()  {
+    if [ "$(id -u)" != "0" ]; then
+        log_failure_msg "You must be root to start, stop or restart $NAME."
+        exit 4
+    fi
+}
+
+check_root
+
+# See how we were called.
+case "$1" in
+  start)
+       echo -n "Starting bro-ids ..."
+       $DAEMON install
+       $DAEMON start
+       ;;
+  stop)
+       echo -n "Stopping bro-ids: "
+       $DAEMON stop
+    ;;
+  status)
+       $DAEMON status
+    ;;
+  restart)
+        $0 stop
+        $0 start
+    ;;
+  force-reload)
+        $0 stop
+        $0 start
+    ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0
