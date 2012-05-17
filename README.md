@@ -7,6 +7,9 @@ Python
 cert2bro.py - Converts a PEM format certificate into a config stanza for 
 Bro-IDS.  Needs hexdump and openssl installed on system.
 
+cif-to-bro.py - Takes a CIF feed of domains and converts it into a data
+structure for use with the sensitive-dns.bro script.
+
 restart_bro.py - Restarts bro nodes that have hung or crashed or passed a 
 certain threshold for packet loss.
 
