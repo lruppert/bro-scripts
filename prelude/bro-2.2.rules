@@ -155,6 +155,37 @@ regex=\d+\.\d+\t\-\t\-\t-\t-\t-\t-\t-\t-\t\-\tTraceroute\:\:Detected\t.* seems t
  source(0).node.address(0).address=$1; \
  last
 
+# Scanner framework
+regex=\d+\.\d+\t-\t-\t-\t-\t-\t-\t-\t-\t\S+\tScan\:\:Port_Scan\t([\:\w]+) scanned at least \d+ unique ports of host ([\:\w]+) in \d+m\d+s\t\S+\t[\:\w]+; \
+ classification.text=Potential Portscan; \
+ id=11020; \
+ revision=1; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=medium; \
+ assessment.impact.description=Heuristically detected portscan from $1; \
+ source(0).node.address(0).category=ipv6-addr; \
+ source(0).node.address(0).address=$1; \
+ target(0).node.address(0).category=ipv6-addr; \
+ target(0).node.address(0).address=$2; \
+ last
+
+regex=\d+\.\d+\t-\t-\t-\t-\t-\t-\t-\t-\t\S+\tScan\:\:Port_Scan\t([\.\d]+) scanned at least \d+ unique ports of host ([\.\d]+) in \d+m\d+s\t\S+\t[\.\d]+; \
+ classification.text=Potential Portscan; \
+ id=11021; \
+ revision=2; \
+ analyzer(0).name=Bro IDS; \
+ analyzer(0).manufacturer=ICSI; \
+ analyzer(0).class=NIDS; \
+ assessment.impact.severity=medium; \
+ assessment.impact.description=Heuristically detected portscan from $1; \
+ source(0).node.address(0).category=ipv4-addr; \
+ source(0).node.address(0).address=$1; \
+ target(0).node.address(0).category=ipv4-addr; \
+ target(0).node.address(0).address=$2; \
+ last
+
 # Catchall for log format for ipv4
 regex=\d+\.\d+\t\w+\t([\d\.]+)\t(\d+)\t([\d\.]+)\t(\d+)\t\S+\t\S+\t\S+\t\S+\t(.+)\t(.+)\t(.+)\t([\d\.]+)\t([\d\.]+)\t(\d+)\t.+\t\S+; \
  classification.text=Bro: $5 $6; \
